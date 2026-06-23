@@ -200,19 +200,19 @@ ${amount}
 
 document.getElementById("monthIncome")
 .innerHTML =
-monthIncome+" บาท";
+monthIncome.toFixed(2)+" บาท";
 
 
 
 document.getElementById("monthExpense")
 .innerHTML =
-monthExpense+" บาท";
+monthExpense.toFixed(2)+" บาท";
 
 
 
 document.getElementById("balance")
 .innerHTML =
-(totalIncome-totalExpense)+" บาท";
+(totalIncome-totalExpense).toFixed(2)+" บาท";
 
 }
 
