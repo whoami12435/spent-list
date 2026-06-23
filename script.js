@@ -141,6 +141,110 @@ showData();
 }
 
 }
+let notes =
+JSON.parse(localStorage.getItem("notes"))
+|| [];
 
+
+
+function saveNote(){
+
+let text =
+document.getElementById("noteText").value;
+
+
+if(!text)return;
+
+
+notes.push({
+
+text:text,
+
+date:
+new Date()
+.toLocaleDateString()
+
+});
+
+
+localStorage.setItem(
+"notes",
+JSON.stringify(notes)
+);
+
+
+document.getElementById("noteText").value="";
+
+
+showNotes();
+
+}
+
+
+
+function deleteNote(i){
+
+notes.splice(i,1);
+
+
+localStorage.setItem(
+"notes",
+JSON.stringify(notes)
+);
+
+
+showNotes();
+
+}
+
+
+
+function showNotes(){
+
+
+let box =
+document.getElementById("notes");
+
+
+box.innerHTML="";
+
+
+notes.forEach((n,i)=>{
+
+
+box.innerHTML+=`
+
+<div class="item">
+
+<div>
+
+${n.text}
+
+<br>
+
+<small>${n.date}</small>
+
+</div>
+
+
+<button onclick="deleteNote(${i})">
+
+ลบ
+
+</button>
+
+
+</div>
+
+
+`;
+
+});
+
+
+}
+
+
+showNotes();
 
 showData();
