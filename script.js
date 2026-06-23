@@ -10,22 +10,18 @@ function addData(){
 let item={
 
 title:
-title.value,
+document.getElementById("title").value,
 
 amount:
-Number(amount.value),
+Number(document.getElementById("amount").value),
 
 
 type:
-type.value,
+document.getElementById("type").value,
 
 
 category:
-category.value,
-
-
-note:
-note.value,
+document.getElementById("category").value,
 
 
 date:
@@ -34,6 +30,12 @@ new Date()
 .split("T")[0]
 
 };
+
+
+if(!item.title || !item.amount){
+alert("กรอกข้อมูลก่อน");
+return;
+}
 
 
 data.push(item);
@@ -67,24 +69,62 @@ document.getElementById("filter").value;
 
 
 
-data
-.filter(x =>
-!filter || x.date==filter
-)
+let monthIncome = 0;
+let monthExpense = 0;
 
-.forEach(x=>{
+let totalIncome = 0;
+let totalExpense = 0;
+
+
+let now =
+new Date()
+.toISOString()
+.substring(0,7);
+
+
+
+data.forEach(x=>{
+
+
+// คำนวณทั้งหมด
+
+if(x.type=="income"){
+
+totalIncome += x.amount;
+
+
+if(x.date.startsWith(now)){
+monthIncome += x.amount;
+}
+
+}
+
+
+else{
+
+totalExpense += x.amount;
+
+
+if(x.date.startsWith(now)){
+monthExpense += x.amount;
+}
+
+}
+
+
+
+// แสดงตามวันที่เลือก
+
+if(!filter || x.date==filter){
 
 
 table.innerHTML+=`
 
 <tr>
 
-
 <td>${x.date}</td>
 
-
 <td>${x.title}</td>
-
 
 <td>${x.category}</td>
 
@@ -97,12 +137,12 @@ ${x.amount}
 </td>
 
 
-<td>${x.note}</td>
-
 <td>
 
 <button onclick="deleteData(${data.indexOf(x)})">
+
 ลบ
+
 </button>
 
 </td>
@@ -112,10 +152,37 @@ ${x.amount}
 
 `;
 
+}
+
+
 });
 
 
+
+// dashboard
+
+document.getElementById("monthIncome")
+.innerHTML =
+monthIncome + " บาท";
+
+
+document.getElementById("monthExpense")
+.innerHTML =
+monthExpense + " บาท";
+
+
+document.getElementById("balance")
+.innerHTML =
+(totalIncome-totalExpense)
++ " บาท";
+
+
 }
+
+
+
+
+
 function deleteData(index){
 
 
@@ -141,6 +208,14 @@ showData();
 }
 
 }
+
+
+
+
+
+// -------- NOTES --------
+
+
 let notes =
 JSON.parse(localStorage.getItem("notes"))
 || [];
@@ -148,6 +223,7 @@ JSON.parse(localStorage.getItem("notes"))
 
 
 function saveNote(){
+
 
 let text =
 document.getElementById("noteText").value;
@@ -182,7 +258,10 @@ showNotes();
 
 
 
+
+
 function deleteNote(i){
+
 
 notes.splice(i,1);
 
@@ -196,6 +275,7 @@ JSON.stringify(notes)
 showNotes();
 
 }
+
 
 
 
@@ -236,13 +316,14 @@ ${n.text}
 
 </div>
 
-
 `;
 
 });
 
 
 }
+
+
 
 
 showNotes();
