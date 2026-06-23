@@ -1,76 +1,3 @@
-let data =
-JSON.parse(localStorage.getItem("money"))
-|| [];
-
-
-
-function addData(){
-
-
-let item={
-
-
-title:
-document.getElementById("title").value,
-
-
-amount:
-Number(document.getElementById("amount").value),
-
-
-type:
-document.getElementById("type").value,
-
-
-category:
-document.getElementById("category").value,
-
-
-note:
-document.getElementById("note").value,
-
-
-date:
-new Date()
-.toISOString()
-.split("T")[0]
-
-
-};
-
-
-
-if(!item.title || !item.amount){
-
-alert("กรอกข้อมูลก่อน");
-
-return;
-
-}
-
-
-
-data.push(item);
-
-
-
-localStorage.setItem(
-"money",
-JSON.stringify(data)
-);
-
-
-
-showData();
-
-
-
-}
-
-
-
-
-
 function showData(){
 
 
@@ -78,9 +5,7 @@ let table =
 document.getElementById("table");
 
 
-
 table.innerHTML="";
-
 
 
 let filter =
@@ -110,33 +35,31 @@ data.forEach((x,index)=>{
 
 
 
-// คิดยอดทั้งหมด
+let amount =
+Number(x.amount);
 
+
+
+// กันข้อมูลเก่า
 if(x.type=="income"){
 
-totalIncome += x.amount;
+totalIncome += amount;
 
 
 if(x.date.startsWith(now)){
-
-monthIncome += x.amount;
-
+monthIncome += amount;
 }
 
 
 }
+else if(x.type=="expense"){
 
-else{
 
-
-totalExpense += x.amount;
-
+totalExpense += amount;
 
 
 if(x.date.startsWith(now)){
-
-monthExpense += x.amount;
-
+monthExpense += amount;
 }
 
 
@@ -146,7 +69,6 @@ monthExpense += x.amount;
 
 
 
-// ตาราง
 
 if(!filter || x.date==filter){
 
@@ -171,7 +93,7 @@ table.innerHTML+=`
 
 ${x.type=="income"?"+":"-"}
 
-${x.amount}
+${amount}
 
 
 </td>
@@ -203,20 +125,15 @@ ${x.note || "-"}
 
 </tr>
 
-
 `;
 
 }
-
 
 
 });
 
 
 
-
-
-// Dashboard
 
 
 document.getElementById("monthIncome")
@@ -238,205 +155,4 @@ document.getElementById("balance")
 
 
 
-}
-
-
-
-
-
-
-
-function deleteData(index){
-
-
-if(confirm("ต้องการลบรายการนี้ไหม?")){
-
-
-data.splice(index,1);
-
-
-
-localStorage.setItem(
-"money",
-JSON.stringify(data)
-);
-
-
-
-showData();
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-
-// =================
-// NOTES
-// =================
-
-
-let notes =
-JSON.parse(localStorage.getItem("notes"))
-|| [];
-
-
-
-
-
-function saveNote(){
-
-
-
-let text =
-document.getElementById("noteText").value;
-
-
-
-if(!text)return;
-
-
-
-notes.push({
-
-
-text:text,
-
-
-date:
-new Date()
-.toLocaleDateString()
-
-
-});
-
-
-
-
-localStorage.setItem(
-"notes",
-JSON.stringify(notes)
-);
-
-
-
-
-document.getElementById("noteText")
-.value="";
-
-
-
-showNotes();
-
-
-
-}
-
-
-
-
-
-
-
-function deleteNote(i){
-
-
-notes.splice(i,1);
-
-
-
-localStorage.setItem(
-"notes",
-JSON.stringify(notes)
-);
-
-
-
-showNotes();
-
-
-}
-
-
-
-
-
-
-
-
-function showNotes(){
-
-
-
-let box =
-document.getElementById("notes");
-
-
-
-box.innerHTML="";
-
-
-
-notes.forEach((n,i)=>{
-
-
-
-box.innerHTML+=`
-
-
-<div class="item">
-
-
-<div>
-
-
-${n.text}
-
-
-<br>
-
-
-<small>${n.date}</small>
-
-
-</div>
-
-
-
-<button onclick="deleteNote(${i})">
-
-ลบ
-
-</button>
-
-
-
-</div>
-
-
-
-`;
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-showNotes();
-
-showData();
+}  
