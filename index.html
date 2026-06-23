@@ -1,129 +1,267 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
+
 <title>Money Tracker</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
+
 <h1>💰 Money Tracker</h1>
+
+
+
+<!-- SUMMARY -->
+
 <div class="summary">
 
 
 <div class="box">
+
 <h3>📈 รายรับเดือนนี้</h3>
+
 <p id="monthIncome">0</p>
+
 </div>
 
 
+
 <div class="box">
+
 <h3>📉 รายจ่ายเดือนนี้</h3>
+
 <p id="monthExpense">0</p>
+
 </div>
+
 
 
 <div class="box">
+
 <h3>💰 เงินคงเหลือ</h3>
+
 <p id="balance">0</p>
+
 </div>
 
 
 </div>
+
+
+
+
+
+<!-- ADD MONEY -->
+
 
 <div class="card">
+
 
 <div class="grid">
 
-<input id="title" placeholder="รายการ">
 
-<input id="amount" 
+<input 
+id="title"
+placeholder="รายการ">
+
+
+
+<input 
+id="amount"
 type="number"
 placeholder="จำนวนเงิน">
 
+
+
 <select id="type">
-<option value="income">รายรับ</option>
-<option value="expense">รายจ่าย</option>
+
+<option value="income">
+รายรับ
+</option>
+
+
+<option value="expense">
+รายจ่าย
+</option>
+
+
 </select>
 
 
-<input id="category"
-placeholder="หมวด เช่น อาหาร, สมาชิก">
+
+<input
+
+id="category"
+
+placeholder="หมวด เช่น อาหาร, สมาชิก"
+
+>
+
 
 </div>
 
 
-<textarea id="note"
-placeholder="Note เช่น Netflix เดือนนี้"></textarea>
+
+
+<textarea
+
+id="note"
+
+placeholder="Note เช่น Netflix เดือนนี้"
+
+></textarea>
+
+
 
 
 <button onclick="addData()">
+
 + เพิ่มรายการ
+
 </button>
+
+
 
 </div>
 
 
+
+
+
+
+
+
+<!-- HISTORY -->
 
 
 <div class="card">
 
+
 <h2>📅 ประวัติ</h2>
 
-<input type="date" id="filter"
-onchange="showData()">
+
+
+<input
+
+type="date"
+
+id="filter"
+
+onchange="showData()"
+
+>
+
+
 
 
 <table>
 
+
 <thead>
 
 <tr>
+
 <th>วันที่</th>
+
 <th>รายการ</th>
+
 <th>หมวด</th>
+
 <th>เงิน</th>
+
 <th>Note</th>
+
 <th>จัดการ</th>
+
+
 </tr>
+
 
 </thead>
 
 
+
 <tbody id="table">
 
+
 </tbody>
+
 
 
 </table>
 
 
-</div>
-
 
 </div>
 
 
-<script src="script.js"></script>
+
+
+
+
+
+
+<!-- NOTES -->
+
+
 <div class="card">
+
 
 <h2>📝 Notes</h2>
 
-<textarea id="noteText"
-placeholder="เขียนโน้ต เช่น Netflix ต่อเดือน 419 บาท"></textarea>
+
+
+<textarea
+
+id="noteText"
+
+placeholder="เขียนโน้ต เช่น Netflix 419 บาท/เดือน"
+
+></textarea>
+
+
 
 
 <button onclick="saveNote()">
+
 บันทึก Note
+
 </button>
+
+
 
 
 <div id="notes"></div>
 
 
+
+
 </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+<script src="script.js"></script>
+
+
 </body>
+
+
 </html>
