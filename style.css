@@ -123,3 +123,41 @@ grid-template-columns:1fr;
 }
 
 }
+.summary{
+
+display:flex;
+gap:15px;
+margin-bottom:25px;
+
+}
+
+
+.box{
+
+background:white;
+padding:20px;
+border-radius:20px;
+flex:1;
+
+box-shadow:0 10px 25px #ddd;
+
+}
+
+
+.box p{
+
+font-size:25px;
+font-weight:bold;
+
+}
+
+
+@media(max-width:600px){
+
+.summary{
+
+flex-direction:column;
+
+}
+
+}
