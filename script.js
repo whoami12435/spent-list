@@ -1,12 +1,38 @@
-let data =
-JSON.parse(localStorage.getItem("money")) || [];
+let data=[];
+
+
+// โหลดข้อมูลจาก Firebase
+
+async function loadData(){
+
+const querySnapshot =
+await getDocs(collection(db,"money"));
+
+
+data=[];
+
+
+querySnapshot.forEach((doc)=>{
+
+data.push({
+id:doc.id,
+...doc.data()
+});
+
+});
+
+
+showData();
+
+}
 
 
 
-function addData(){
+async function addData(){
 
 
-let item = {
+let item={
+
 
 title:
 document.getElementById("title").value,
@@ -33,6 +59,7 @@ new Date()
 .toISOString()
 .split("T")[0]
 
+
 };
 
 
@@ -47,13 +74,9 @@ return;
 
 
 
-data.push(item);
-
-
-
-localStorage.setItem(
-"money",
-JSON.stringify(data)
+await addDoc(
+collection(db,"money"),
+item
 );
 
 
@@ -64,12 +87,10 @@ document.getElementById("category").value="";
 document.getElementById("note").value="";
 
 
+loadData();
 
-showData();
 
 }
-
-
 
 
 
@@ -85,24 +106,9 @@ document.getElementById("table");
 table.innerHTML="";
 
 
-let filter =
-document.getElementById("filter").value;
-
-
-
-let monthIncome=0;
-let monthExpense=0;
 
 let totalIncome=0;
 let totalExpense=0;
-
-
-
-let now =
-new Date()
-.toISOString()
-.substring(0,7);
-
 
 
 
@@ -114,66 +120,38 @@ Number(x.amount);
 
 
 
-if(x.type=="income"){
+if(x.type=="income")
+totalIncome+=amount;
 
-totalIncome += amount;
-
-
-if(x.date.startsWith(now)){
-monthIncome += amount;
-}
-
-}
-
-
-else{
-
-
-totalExpense += amount;
-
-
-if(x.date.startsWith(now)){
-monthExpense += amount;
-}
-
-}
+else
+totalExpense+=amount;
 
 
 
-
-if(!filter || x.date==filter){
-
-
-
-table.innerHTML += `
+table.innerHTML+=`
 
 
 <tr>
 
-
 <td>${x.date}</td>
-
 
 <td>${x.title}</td>
 
-
 <td>${x.category}</td>
 
-
-<td class="${x.type}">
+<td>
 
 ${x.type=="income"?"+":"-"}
-${amount}
+${amount.toFixed(2)}
 
 </td>
 
-
-<td>${x.note || "-"}</td>
+<td>${x.note}</td>
 
 
 <td>
 
-<button onclick="deleteData(${index})">
+<button onclick="deleteData('${x.id}')">
 
 ลบ
 
@@ -188,31 +166,15 @@ ${amount}
 
 `;
 
-}
-
-
-
 });
-
-
-
-
-
-document.getElementById("monthIncome")
-.innerHTML =
-monthIncome.toFixed(2)+" บาท";
-
-
-
-document.getElementById("monthExpense")
-.innerHTML =
-monthExpense.toFixed(2)+" บาท";
 
 
 
 document.getElementById("balance")
 .innerHTML =
-(totalIncome-totalExpense).toFixed(2)+" บาท";
+(totalIncome-totalExpense)
+.toFixed(2)+" บาท";
+
 
 }
 
@@ -220,24 +182,19 @@ document.getElementById("balance")
 
 
 
-function deleteData(index){
+async function deleteData(id){
 
 
 if(confirm("ลบรายการนี้ไหม?")){
 
 
-data.splice(index,1);
-
-
-
-localStorage.setItem(
-"money",
-JSON.stringify(data)
+await deleteDoc(
+doc(db,"money",id)
 );
 
 
 
-showData();
+loadData();
 
 
 }
@@ -248,139 +205,4 @@ showData();
 
 
 
-
-
-
-// NOTES
-
-
-let notes =
-JSON.parse(localStorage.getItem("notes")) || [];
-
-
-
-
-
-function saveNote(){
-
-
-let text =
-document.getElementById("noteText").value;
-
-
-
-if(!text)return;
-
-
-
-notes.push({
-
-text:text,
-
-date:
-new Date()
-.toLocaleDateString()
-
-});
-
-
-
-localStorage.setItem(
-"notes",
-JSON.stringify(notes)
-);
-
-
-
-document.getElementById("noteText").value="";
-
-
-
-showNotes();
-
-}
-
-
-
-
-
-
-
-function showNotes(){
-
-
-let box =
-document.getElementById("notes");
-
-
-
-if(!box)return;
-
-
-
-box.innerHTML="";
-
-
-
-notes.forEach((n,i)=>{
-
-
-box.innerHTML += `
-
-
-<div class="item">
-
-
-${n.text}
-
-<br>
-
-<small>${n.date}</small>
-
-
-<button onclick="deleteNote(${i})">
-
-ลบ
-
-</button>
-
-
-</div>
-
-
-`;
-
-});
-
-
-}
-
-
-
-
-function deleteNote(i){
-
-
-notes.splice(i,1);
-
-
-
-localStorage.setItem(
-"notes",
-JSON.stringify(notes)
-);
-
-
-
-showNotes();
-
-
-}
-
-
-
-
-
-showNotes();
-
-showData();
+loadData();
