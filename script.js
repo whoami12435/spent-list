@@ -7,7 +7,7 @@ import {
 getFirestore,
 collection,
 addDoc,
-getDocs,
+onSnapshot,
 deleteDoc,
 doc
 
@@ -18,10 +18,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 
-// ใส่ของคุณตรงนี้
+// Firebase config ของคุณ
 
 const firebaseConfig = {
-
 
 apiKey:"YOUR_KEY",
 
@@ -34,7 +33,6 @@ storageBucket:"YOUR_BUCKET",
 messagingSenderId:"YOUR_ID",
 
 appId:"YOUR_APP"
-
 
 };
 
@@ -60,15 +58,16 @@ let data=[];
 
 
 
+// โหลด + sync realtime
 
-async function loadData(){
+function loadData(){
 
 
-const snapshot =
-await getDocs(
-collection(db,"money")
-);
+onSnapshot(
 
+collection(db,"money"),
+
+(snapshot)=>{
 
 
 data=[];
@@ -96,11 +95,18 @@ showData();
 
 }
 
+);
+
+
+}
 
 
 
 
 
+
+
+// เพิ่มรายการ
 
 async function addData(){
 
@@ -141,7 +147,6 @@ new Date()
 .split("T")[0]
 
 
-
 };
 
 
@@ -160,6 +165,17 @@ return;
 
 
 
+// แสดงทันที
+
+data.push(item);
+
+showData();
+
+
+
+
+
+// บันทึก Firebase
 
 await addDoc(
 
@@ -173,6 +189,7 @@ item
 
 
 
+// เคลียร์ช่อง
 
 document.getElementById("title").value="";
 
@@ -184,11 +201,6 @@ document.getElementById("note").value="";
 
 
 
-
-
-loadData();
-
-
 }
 
 
@@ -198,6 +210,8 @@ loadData();
 
 
 
+
+// แสดงตาราง
 
 function showData(){
 
@@ -233,6 +247,14 @@ new Date()
 
 
 
+let filter =
+document.getElementById("filter").value;
+
+
+
+
+
+
 data.forEach((x)=>{
 
 
@@ -250,8 +272,11 @@ totalIncome += money;
 
 
 
-if(x.date.startsWith(now))
+if(x.date.startsWith(now)){
+
 monthIncome += money;
+
+}
 
 
 }
@@ -265,14 +290,21 @@ totalExpense += money;
 
 
 
-if(x.date.startsWith(now))
+if(x.date.startsWith(now)){
+
 monthExpense += money;
+
+}
 
 
 }
 
 
 
+
+
+
+if(!filter || x.date==filter){
 
 
 
@@ -291,19 +323,23 @@ table.innerHTML += `
 <td>${x.category}</td>
 
 
-<td>
+
+<td class="${x.type}">
 
 
 ${x.type=="income"?"+":"-"}
 
 ${money.toFixed(2)}
 
-
 </td>
 
 
 
-<td>${x.note}</td>
+<td>
+
+${x.note || "-"}
+
+</td>
 
 
 
@@ -327,11 +363,11 @@ ${money.toFixed(2)}
 
 `;
 
-
-
+}
 
 
 });
+
 
 
 
@@ -359,8 +395,6 @@ document.getElementById("balance")
 
 
 
-
-
 }
 
 
@@ -370,9 +404,9 @@ document.getElementById("balance")
 
 
 
+// ลบ
 
 async function deleteData(id){
-
 
 
 if(confirm("ลบรายการนี้ไหม?")){
@@ -385,10 +419,6 @@ doc(db,"money",id)
 );
 
 
-
-loadData();
-
-
 }
 
 
@@ -399,6 +429,7 @@ loadData();
 
 
 
+// ให้ HTML เรียกได้
 
 window.addData = addData;
 
@@ -407,5 +438,9 @@ window.deleteData = deleteData;
 window.showData = showData;
 
 
+
+
+
+// เริ่มระบบ
 
 loadData();
