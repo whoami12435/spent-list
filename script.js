@@ -22,17 +22,17 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 
-apiKey:"YOUR_KEY",
+apiKey:"AIzaSyAG5GA2eiKIpHrnWIugkpJogk_f6On8Nzo",
 
-authDomain:"YOUR_DOMAIN",
+authDomain:"list-money.firebaseapp.com",
 
-projectId:"YOUR_ID",
+projectId:"list-money",
 
-storageBucket:"YOUR_BUCKET",
+storageBucket:"list-money.firebasestorage.app",
 
-messagingSenderId:"YOUR_ID",
+messagingSenderId:"722706752955",
 
-appId:"YOUR_APP"
+appId:"1:722706752955:web:c0fe99f809a4dbc98b909e"
 
 };
 
