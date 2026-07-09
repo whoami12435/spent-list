@@ -29,7 +29,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let data = [];
-
+let notes = [];
 
 // ==============================
 // โหลดข้อมูลแบบ Realtime
@@ -131,7 +131,108 @@ async function addData() {
     }
 
 }
+function loadNotes() {
 
+    onSnapshot(
+        collection(db, "notes"),
+
+        (snapshot) => {
+
+            notes = [];
+
+            snapshot.forEach((item) => {
+
+                notes.push({
+                    id: item.id,
+                    ...item.data()
+                });
+
+            });
+
+            showNotes();
+
+        }
+
+    );
+
+}
+async function addNote() {
+
+    const title =
+        document.getElementById("noteTitle").value.trim();
+
+    const content =
+        document.getElementById("noteContent").value.trim();
+
+    const date =
+        document.getElementById("noteDate").value ||
+        new Date().toISOString().split("T")[0];
+
+    if (title === "") {
+
+        alert("กรุณากรอกหัวข้อ");
+        return;
+
+    }
+
+    await addDoc(
+        collection(db, "notes"),
+        {
+            title,
+            content,
+            date
+        }
+    );
+
+    document.getElementById("noteTitle").value = "";
+    document.getElementById("noteContent").value = "";
+}
+function showNotes() {
+
+    const table =
+        document.getElementById("noteTable");
+
+    table.innerHTML = "";
+
+    notes.forEach((x) => {
+
+        table.innerHTML += `
+
+<tr>
+
+<td>${x.date}</td>
+
+<td>${x.title}</td>
+
+<td>${x.content}</td>
+
+<td>
+
+<button onclick="deleteNote('${x.id}')">
+
+ลบ
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+    });
+
+}
+async function deleteNote(id) {
+
+    if (!confirm("ลบ Note ?"))
+        return;
+
+    await deleteDoc(
+        doc(db, "notes", id)
+    );
+
+}
 // ==============================
 // แสดงข้อมูล
 // ==============================
@@ -296,6 +397,8 @@ window.changeType = function () {
 window.addData = addData;
 window.deleteData = deleteData;
 window.showData = showData;
+window.addNote = addNote;
+window.deleteNote = deleteNote;
 
 
 
@@ -304,3 +407,7 @@ window.showData = showData;
 // ==============================
 changeType();
 loadData();
+loadNotes();
+
+document.getElementById("noteDate").value =
+    new Date().toISOString().split("T")[0];
