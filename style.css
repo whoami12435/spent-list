@@ -16,7 +16,10 @@ padding:30px;
 }
 
 
-
+.note{
+    color:#2196f3;
+    font-weight:bold;
+}
 .card{
 
 background:white;
