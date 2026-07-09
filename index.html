@@ -156,7 +156,55 @@ onchange="showData()">
 
 </div>
 <div class="card">
-<h2> note</h2>
+
+    <h2>📝 Notes</h2>
+
+    <div class="grid">
+
+        <input
+            id="noteTitle"
+            placeholder="หัวข้อ">
+
+        <input
+            type="date"
+            id="noteDate">
+
+    </div>
+
+    <textarea
+        id="noteContent"
+        placeholder="รายละเอียด"></textarea>
+
+    <button onclick="addNote()">
+        + เพิ่ม Note
+    </button>
+
+</div>
+<div class="card">
+
+    <h2>📚 รายการ Notes</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>วันที่</th>
+                <th>หัวข้อ</th>
+                <th>รายละเอียด</th>
+                <th>จัดการ</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="noteTable">
+
+        </tbody>
+
+    </table>
+
 </div>
 
 
