@@ -76,27 +76,25 @@ function loadData() {
 
 async function addData() {
 
+    const type = document.getElementById("type").value;
+
     let item = {
 
         title: document.getElementById("title").value.trim(),
 
-        amount: Number(
-            document.getElementById("amount").value
-        ),
+        amount: type === "note"
+            ? 0
+            : Number(document.getElementById("amount").value),
 
-        type: document.getElementById("type").value,
+        type: type,
 
         category: document.getElementById("category").value.trim(),
 
         note: document.getElementById("note").value.trim(),
 
-        date: new Date()
-            .toISOString()
-            .split("T")[0]
+        date: new Date().toISOString().split("T")[0]
 
     };
-
-
 
     if (item.title == "") {
 
@@ -105,22 +103,19 @@ async function addData() {
 
     }
 
-    if (isNaN(item.amount) || item.amount <= 0) {
+    if (
+        type !== "note" &&
+        (isNaN(item.amount) || item.amount <= 0)
+    ) {
 
         alert("กรุณากรอกจำนวนเงิน");
         return;
 
     }
 
-
     try {
 
-        const docRef = await addDoc(
-            collection(db, "money"),
-            item
-        );
-
-        console.log("เพิ่มสำเร็จ :", docRef.id);
+        await addDoc(collection(db, "money"), item);
 
         document.getElementById("title").value = "";
         document.getElementById("amount").value = "";
@@ -128,18 +123,14 @@ async function addData() {
         document.getElementById("note").value = "";
 
     }
-
-    catch (error) {
+    catch(error){
 
         console.error(error);
-
         alert(error.message);
 
     }
 
 }
-
-
 
 // ==============================
 // แสดงข้อมูล
@@ -203,10 +194,14 @@ function showData() {
 <td>${x.category}</td>
 
 <td class="${x.type}">
-${x.type == "income" ? "+" : "-"}
-${money.toFixed(2)}
+${
+    x.type === "income"
+        ? "+" + money.toFixed(2)
+        : x.type === "expense"
+        ? "-" + money.toFixed(2)
+        : "📝 Note"
+}
 </td>
-
 <td>${x.note || "-"}</td>
 
 <td>
@@ -269,12 +264,35 @@ async function deleteData(id) {
 
 }
 
+window.changeType = function () {
 
+    const type = document.getElementById("type").value;
+
+    const amount = document.getElementById("amount");
+    const category = document.getElementById("category");
+
+    if (type === "note") {
+
+        amount.disabled = true;
+        amount.value = "";
+        amount.placeholder = "ไม่ต้องกรอก";
+
+        category.placeholder = "หัวข้อ (ไม่บังคับ)";
+
+    } else {
+
+        amount.disabled = false;
+        amount.placeholder = "จำนวนเงิน";
+        category.placeholder = "หมวด เช่น อาหาร";
+
+    }
+
+}
 
 // ==============================
 // Export ให้ HTML เรียกได้
 // ==============================
-
+changeType();
 window.addData = addData;
 window.deleteData = deleteData;
 window.showData = showData;
