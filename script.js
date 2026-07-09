@@ -17,7 +17,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 // ==============================
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
+    apiKey: "AIzaSyAG5GA2eiKIpHrnWIugkpJogk_f6On8Nzo",
     authDomain: "list-money.firebaseapp.com",
     projectId: "list-money",
     storageBucket: "list-money.firebasestorage.app",
