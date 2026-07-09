@@ -292,7 +292,7 @@ window.changeType = function () {
 // ==============================
 // Export ให้ HTML เรียกได้
 // ==============================
-changeType();
+
 window.addData = addData;
 window.deleteData = deleteData;
 window.showData = showData;
@@ -302,5 +302,5 @@ window.showData = showData;
 // ==============================
 // เริ่มระบบ
 // ==============================
-
+changeType();
 loadData();
